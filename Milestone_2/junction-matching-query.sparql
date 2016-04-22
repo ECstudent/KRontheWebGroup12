@@ -1,15 +1,19 @@
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX krv: <http://data.krw.d2s.labs.vu.nl/group12/vocab/>
-PREFIX krr: <http://data.krw.d2s.labs.vu.nl/group12/resource/>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX geo: <http://www.opengis.net/ont/geosparql#>
-PREFIX gsf: <http://www.opengis.net/ont/sf#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
-PREFIX qudt: <http://qudt.org/vocab/unit#>
+PREFIX unit: <http://qudt.org/vocab/unit#>
+
+# Assert equality between junctions and trafficlightjunctions 
+# based on geographical proximity
 
 CONSTRUCT {
-    
+  ?junc     owl:sameAs          ?tljunc .  
 } WHERE {
-    
+  ?junc		a                   krv:Junction ;
+        	geo:hasGeometry		?geo1 .  
+  ?tljunc	a                   krv:TrafficlightJunction ;
+            geo:hasGeometry		?geo2 .  
+  FILTER(geof:distance(?geo1, ?geo2, unit:Meter) < 20)  
 }
